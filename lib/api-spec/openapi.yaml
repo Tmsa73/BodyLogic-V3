@@ -1,0 +1,1296 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.2.0
+  description: BodyLogic - AI-Powered Health & Fitness Tracker API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+  - name: profile
+  - name: nutrition
+  - name: fitness
+  - name: sleep
+  - name: ai
+  - name: history
+  - name: insights
+  - name: water
+  - name: steps
+  - name: progress
+  - name: notifications
+  - name: mealiq
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /profile:
+    get:
+      operationId: getProfile
+      tags: [profile]
+      summary: Get user profile
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+    put:
+      operationId: updateProfile
+      tags: [profile]
+      summary: Update user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileBody"
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+
+  /profile/stats:
+    get:
+      operationId: getProfileStats
+      tags: [profile]
+      summary: Get profile stats and progress
+      responses:
+        "200":
+          description: Profile stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileStats"
+
+  /meals:
+    get:
+      operationId: getMeals
+      tags: [nutrition]
+      summary: Get logged meals
+      parameters:
+        - name: date
+          in: query
+          schema:
+            type: string
+          description: Filter by date (YYYY-MM-DD)
+      responses:
+        "200":
+          description: List of meals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Meal"
+    post:
+      operationId: logMeal
+      tags: [nutrition]
+      summary: Log a meal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LogMealBody"
+      responses:
+        "201":
+          description: Meal logged
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Meal"
+
+  /meals/{id}:
+    delete:
+      operationId: deleteMeal
+      tags: [nutrition]
+      summary: Delete a meal log
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Meal deleted
+
+  /nutrition/summary:
+    get:
+      operationId: getNutritionSummary
+      tags: [nutrition]
+      summary: Get today's nutrition summary
+      responses:
+        "200":
+          description: Nutrition summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NutritionSummary"
+
+  /nutrition/streak:
+    get:
+      operationId: getMealStreak
+      tags: [nutrition]
+      summary: Get current meal logging streak
+      responses:
+        "200":
+          description: Meal streak
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MealStreak"
+
+  /meal-iq/{id}:
+    get:
+      operationId: getMealIQ
+      tags: [mealiq]
+      summary: Get Meal IQ score for a specific meal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Meal IQ analysis
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MealIQ"
+
+  /meal-iq/daily:
+    get:
+      operationId: getDailyMealIQ
+      tags: [mealiq]
+      summary: Get combined Meal IQ score for today
+      responses:
+        "200":
+          description: Daily Meal IQ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DailyMealIQ"
+
+  /workouts:
+    get:
+      operationId: getWorkouts
+      tags: [fitness]
+      summary: Get logged workouts
+      parameters:
+        - name: date
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of workouts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Workout"
+    post:
+      operationId: logWorkout
+      tags: [fitness]
+      summary: Log a workout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LogWorkoutBody"
+      responses:
+        "201":
+          description: Workout logged
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workout"
+
+  /workouts/{id}:
+    delete:
+      operationId: deleteWorkout
+      tags: [fitness]
+      summary: Delete a workout log
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Workout deleted
+
+  /fitness/summary:
+    get:
+      operationId: getFitnessSummary
+      tags: [fitness]
+      summary: Get fitness activity summary for the week
+      responses:
+        "200":
+          description: Fitness summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FitnessSummary"
+
+  /sleep:
+    get:
+      operationId: getSleepLogs
+      tags: [sleep]
+      summary: Get sleep logs
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 7
+      responses:
+        "200":
+          description: Sleep logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SleepLog"
+    post:
+      operationId: logSleep
+      tags: [sleep]
+      summary: Log sleep
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LogSleepBody"
+      responses:
+        "201":
+          description: Sleep logged
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SleepLog"
+
+  /water:
+    get:
+      operationId: getWaterIntake
+      tags: [water]
+      summary: Get today's water intake
+      responses:
+        "200":
+          description: Water intake
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WaterIntake"
+    post:
+      operationId: logWater
+      tags: [water]
+      summary: Add water intake
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LogWaterBody"
+      responses:
+        "200":
+          description: Updated water intake
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WaterIntake"
+
+  /steps:
+    get:
+      operationId: getSteps
+      tags: [steps]
+      summary: Get today's step count and weekly activity
+      responses:
+        "200":
+          description: Steps data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StepsData"
+    post:
+      operationId: updateSteps
+      tags: [steps]
+      summary: Update step count for today
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStepsBody"
+      responses:
+        "200":
+          description: Updated steps
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StepsData"
+
+  /progress:
+    get:
+      operationId: getProgress
+      tags: [progress]
+      summary: Get user progress, XP, level, achievements
+      responses:
+        "200":
+          description: User progress
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProgress"
+
+  /progress/missions:
+    get:
+      operationId: getMissions
+      tags: [progress]
+      summary: Get daily and weekly missions
+      responses:
+        "200":
+          description: Missions list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Mission"
+
+  /notifications:
+    get:
+      operationId: getNotifications
+      tags: [notifications]
+      summary: Get notifications list
+      responses:
+        "200":
+          description: Notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+
+  /notifications/{id}/read:
+    post:
+      operationId: markNotificationRead
+      tags: [notifications]
+      summary: Mark notification as read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Marked as read
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+
+  /ai/messages:
+    get:
+      operationId: getAiMessages
+      tags: [ai]
+      summary: Get AI coach conversation history
+      responses:
+        "200":
+          description: Messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AiMessage"
+    post:
+      operationId: sendAiMessage
+      tags: [ai]
+      summary: Send a message to the AI coach
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendAiMessageBody"
+      responses:
+        "200":
+          description: AI response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AiMessage"
+
+  /ai/insights:
+    get:
+      operationId: getAiInsights
+      tags: [ai]
+      summary: Get AI-generated health insights and tips
+      responses:
+        "200":
+          description: AI insights
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AiInsights"
+
+  /history:
+    get:
+      operationId: getHistory
+      tags: [history]
+      summary: Get combined activity history
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 30
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [all, meal, workout, sleep]
+            default: all
+        - name: days
+          in: query
+          schema:
+            type: integer
+            default: 28
+      responses:
+        "200":
+          description: History entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/HistoryEntry"
+
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [insights]
+      summary: Get full dashboard summary
+      responses:
+        "200":
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /life-balance:
+    get:
+      operationId: getLifeBalance
+      tags: [insights]
+      summary: Get Life Balance Score and breakdown
+      responses:
+        "200":
+          description: Life balance score
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LifeBalance"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required: [status]
+
+    Profile:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        age:
+          type: integer
+        gender:
+          type: string
+        weight:
+          type: number
+        height:
+          type: number
+        goal:
+          type: string
+          enum: [lose_weight, maintain, build_muscle, improve_fitness]
+        activityLevel:
+          type: string
+          enum: [sedentary, light, moderate, active, very_active]
+        dailyCalorieGoal:
+          type: integer
+        dailyWaterGoalMl:
+          type: integer
+        dailyStepGoal:
+          type: integer
+        avatarUrl:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, name, age, gender, weight, height, goal, activityLevel, dailyCalorieGoal, dailyWaterGoalMl, dailyStepGoal, createdAt]
+
+    UpdateProfileBody:
+      type: object
+      properties:
+        name:
+          type: string
+        age:
+          type: integer
+        gender:
+          type: string
+        weight:
+          type: number
+        height:
+          type: number
+        goal:
+          type: string
+          enum: [lose_weight, maintain, build_muscle, improve_fitness]
+        activityLevel:
+          type: string
+          enum: [sedentary, light, moderate, active, very_active]
+        dailyCalorieGoal:
+          type: integer
+        dailyWaterGoalMl:
+          type: integer
+        dailyStepGoal:
+          type: integer
+        avatarUrl:
+          type: string
+          nullable: true
+
+    ProfileStats:
+      type: object
+      properties:
+        totalWorkouts:
+          type: integer
+        totalMealsLogged:
+          type: integer
+        currentStreak:
+          type: integer
+        avgCaloriesPerDay:
+          type: number
+        avgSleepHours:
+          type: number
+        weeklyWorkouts:
+          type: integer
+        weightProgress:
+          type: number
+        totalXP:
+          type: integer
+        level:
+          type: integer
+        coins:
+          type: integer
+      required: [totalWorkouts, totalMealsLogged, currentStreak, avgCaloriesPerDay, avgSleepHours, weeklyWorkouts, weightProgress, totalXP, level, coins]
+
+    Meal:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        calories:
+          type: integer
+        protein:
+          type: number
+        carbs:
+          type: number
+        fat:
+          type: number
+        fiber:
+          type: number
+        sugar:
+          type: number
+        vitamins:
+          type: string
+          nullable: true
+        mealType:
+          type: string
+          enum: [breakfast, lunch, dinner, snack]
+        loggedAt:
+          type: string
+          format: date-time
+        notes:
+          type: string
+          nullable: true
+        mealIqScore:
+          type: number
+          nullable: true
+      required: [id, name, calories, protein, carbs, fat, fiber, sugar, mealType, loggedAt]
+
+    LogMealBody:
+      type: object
+      properties:
+        name:
+          type: string
+        calories:
+          type: integer
+        protein:
+          type: number
+        carbs:
+          type: number
+        fat:
+          type: number
+        fiber:
+          type: number
+        sugar:
+          type: number
+        vitamins:
+          type: string
+          nullable: true
+        mealType:
+          type: string
+          enum: [breakfast, lunch, dinner, snack]
+        notes:
+          type: string
+          nullable: true
+      required: [name, calories, protein, carbs, fat, fiber, sugar, mealType]
+
+    MealIQ:
+      type: object
+      properties:
+        mealId:
+          type: integer
+        mealName:
+          type: string
+        score:
+          type: number
+          description: Score from 0 to 28
+        maxScore:
+          type: integer
+          default: 28
+        grade:
+          type: string
+          enum: [excellent, good, fair, poor]
+        strengths:
+          type: array
+          items:
+            type: string
+        weaknesses:
+          type: array
+          items:
+            type: string
+        suggestions:
+          type: array
+          items:
+            type: string
+        breakdown:
+          type: object
+          properties:
+            proteinScore:
+              type: number
+            carbScore:
+              type: number
+            fatScore:
+              type: number
+            fiberScore:
+              type: number
+            sugarScore:
+              type: number
+            balanceScore:
+              type: number
+            calorieScore:
+              type: number
+          required: [proteinScore, carbScore, fatScore, fiberScore, sugarScore, balanceScore, calorieScore]
+      required: [mealId, mealName, score, maxScore, grade, strengths, weaknesses, suggestions, breakdown]
+
+    DailyMealIQ:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        overallScore:
+          type: number
+        maxScore:
+          type: integer
+          default: 28
+        grade:
+          type: string
+          enum: [excellent, good, fair, poor]
+        mealsCount:
+          type: integer
+        topStrength:
+          type: string
+          nullable: true
+        topWeakness:
+          type: string
+          nullable: true
+        suggestion:
+          type: string
+      required: [date, overallScore, maxScore, grade, mealsCount, suggestion]
+
+    NutritionSummary:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        totalCalories:
+          type: integer
+        totalProtein:
+          type: number
+        totalCarbs:
+          type: number
+        totalFat:
+          type: number
+        totalFiber:
+          type: number
+        totalSugar:
+          type: number
+        calorieGoal:
+          type: integer
+        mealsCount:
+          type: integer
+        macroBreakdown:
+          type: object
+          properties:
+            proteinPercent:
+              type: number
+            carbsPercent:
+              type: number
+            fatPercent:
+              type: number
+          required: [proteinPercent, carbsPercent, fatPercent]
+      required: [date, totalCalories, totalProtein, totalCarbs, totalFat, totalFiber, totalSugar, calorieGoal, mealsCount, macroBreakdown]
+
+    MealStreak:
+      type: object
+      properties:
+        currentStreak:
+          type: integer
+        longestStreak:
+          type: integer
+        lastLoggedDate:
+          type: string
+          format: date
+          nullable: true
+      required: [currentStreak, longestStreak]
+
+    Workout:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum: [strength, cardio, flexibility, hiit, yoga, running, cycling, swimming, other]
+        durationMinutes:
+          type: integer
+        caloriesBurned:
+          type: integer
+        intensity:
+          type: string
+          enum: [low, moderate, high]
+        distanceKm:
+          type: number
+          nullable: true
+        loggedAt:
+          type: string
+          format: date-time
+        notes:
+          type: string
+          nullable: true
+      required: [id, name, type, durationMinutes, caloriesBurned, intensity, loggedAt]
+
+    LogWorkoutBody:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [strength, cardio, flexibility, hiit, yoga, running, cycling, swimming, other]
+        durationMinutes:
+          type: integer
+        caloriesBurned:
+          type: integer
+        intensity:
+          type: string
+          enum: [low, moderate, high]
+        distanceKm:
+          type: number
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required: [name, type, durationMinutes, caloriesBurned, intensity]
+
+    FitnessSummary:
+      type: object
+      properties:
+        weeklyWorkouts:
+          type: integer
+        totalMinutes:
+          type: integer
+        totalCaloriesBurned:
+          type: integer
+        totalDistanceKm:
+          type: number
+        avgDuration:
+          type: number
+        activeDays:
+          type: integer
+        workoutTypeBreakdown:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              count:
+                type: integer
+            required: [type, count]
+        weeklyActivity:
+          type: array
+          items:
+            type: object
+            properties:
+              day:
+                type: string
+              minutes:
+                type: integer
+              calories:
+                type: integer
+            required: [day, minutes, calories]
+      required: [weeklyWorkouts, totalMinutes, totalCaloriesBurned, totalDistanceKm, avgDuration, activeDays, workoutTypeBreakdown, weeklyActivity]
+
+    SleepLog:
+      type: object
+      properties:
+        id:
+          type: integer
+        bedtime:
+          type: string
+          format: date-time
+        wakeTime:
+          type: string
+          format: date-time
+        durationHours:
+          type: number
+        quality:
+          type: string
+          enum: [poor, fair, good, excellent]
+        deepSleepHours:
+          type: number
+        lightSleepHours:
+          type: number
+        remSleepHours:
+          type: number
+        awakeMins:
+          type: integer
+        sleepScore:
+          type: integer
+        date:
+          type: string
+          format: date
+      required: [id, bedtime, wakeTime, durationHours, quality, deepSleepHours, lightSleepHours, remSleepHours, awakeMins, sleepScore, date]
+
+    LogSleepBody:
+      type: object
+      properties:
+        bedtime:
+          type: string
+          format: date-time
+        wakeTime:
+          type: string
+          format: date-time
+        quality:
+          type: string
+          enum: [poor, fair, good, excellent]
+        deepSleepHours:
+          type: number
+        lightSleepHours:
+          type: number
+        remSleepHours:
+          type: number
+        awakeMins:
+          type: integer
+      required: [bedtime, wakeTime, quality]
+
+    WaterIntake:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        totalMl:
+          type: integer
+        goalMl:
+          type: integer
+        glasses:
+          type: integer
+        percentComplete:
+          type: number
+        logs:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              amountMl:
+                type: integer
+              loggedAt:
+                type: string
+                format: date-time
+            required: [id, amountMl, loggedAt]
+      required: [date, totalMl, goalMl, glasses, percentComplete, logs]
+
+    LogWaterBody:
+      type: object
+      properties:
+        amountMl:
+          type: integer
+          description: Amount in milliliters (e.g., 250 for one glass)
+      required: [amountMl]
+
+    StepsData:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        todaySteps:
+          type: integer
+        stepGoal:
+          type: integer
+        percentComplete:
+          type: number
+        caloriesBurned:
+          type: integer
+        distanceKm:
+          type: number
+        activeMinutes:
+          type: integer
+        weeklySteps:
+          type: array
+          items:
+            type: object
+            properties:
+              day:
+                type: string
+              steps:
+                type: integer
+            required: [day, steps]
+      required: [date, todaySteps, stepGoal, percentComplete, caloriesBurned, distanceKm, activeMinutes, weeklySteps]
+
+    UpdateStepsBody:
+      type: object
+      properties:
+        steps:
+          type: integer
+      required: [steps]
+
+    UserProgress:
+      type: object
+      properties:
+        level:
+          type: integer
+        xp:
+          type: integer
+        xpToNextLevel:
+          type: integer
+        coins:
+          type: integer
+        title:
+          type: string
+        badges:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              icon:
+                type: string
+              earnedAt:
+                type: string
+                format: date-time
+                nullable: true
+              earned:
+                type: boolean
+            required: [id, name, description, icon, earned]
+        recentXpGains:
+          type: array
+          items:
+            type: object
+            properties:
+              source:
+                type: string
+              amount:
+                type: integer
+              earnedAt:
+                type: string
+                format: date-time
+            required: [source, amount, earnedAt]
+        stats:
+          type: object
+          properties:
+            totalWorkouts:
+              type: integer
+            totalMealsLogged:
+              type: integer
+            longestStreak:
+              type: integer
+            currentStreak:
+              type: integer
+          required: [totalWorkouts, totalMealsLogged, longestStreak, currentStreak]
+      required: [level, xp, xpToNextLevel, coins, title, badges, recentXpGains, stats]
+
+    Mission:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum: [daily, weekly]
+        category:
+          type: string
+          enum: [nutrition, fitness, sleep, water, streak, general]
+        progress:
+          type: integer
+        target:
+          type: integer
+        xpReward:
+          type: integer
+        coinReward:
+          type: integer
+        completed:
+          type: boolean
+        icon:
+          type: string
+      required: [id, title, description, type, category, progress, target, xpReward, coinReward, completed, icon]
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string
+        type:
+          type: string
+          enum: [water, meal, workout, achievement, tip, system]
+        read:
+          type: boolean
+        icon:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, title, message, type, read, icon, createdAt]
+
+    AiMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, role, content, createdAt]
+
+    SendAiMessageBody:
+      type: object
+      properties:
+        content:
+          type: string
+      required: [content]
+
+    AiInsights:
+      type: object
+      properties:
+        tips:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              category:
+                type: string
+                enum: [nutrition, fitness, sleep, water, general]
+              title:
+                type: string
+              description:
+                type: string
+              priority:
+                type: string
+                enum: [high, medium, low]
+            required: [id, category, title, description, priority]
+        mealSuggestion:
+          type: string
+        workoutSuggestion:
+          type: string
+        motivationalQuote:
+          type: string
+        behaviorAnalysis:
+          type: string
+      required: [tips, mealSuggestion, workoutSuggestion, motivationalQuote, behaviorAnalysis]
+
+    HistoryEntry:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [meal, workout, sleep, water, steps]
+        title:
+          type: string
+        subtitle:
+          type: string
+        date:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          additionalProperties: true
+      required: [id, type, title, subtitle, date]
+
+    DashboardSummary:
+      type: object
+      properties:
+        greeting:
+          type: string
+        todayCalories:
+          type: integer
+        calorieGoal:
+          type: integer
+        caloriesBurned:
+          type: integer
+        todayWorkoutMinutes:
+          type: integer
+        lastSleepHours:
+          type: number
+        lastSleepQuality:
+          type: string
+          nullable: true
+        lastSleepScore:
+          type: integer
+          nullable: true
+        currentStreak:
+          type: integer
+        weeklyWorkouts:
+          type: integer
+        todaySteps:
+          type: integer
+        stepGoal:
+          type: integer
+        waterMl:
+          type: integer
+        waterGoalMl:
+          type: integer
+        mealIqScore:
+          type: number
+          nullable: true
+        lifeBalanceScore:
+          type: number
+        level:
+          type: integer
+        xp:
+          type: integer
+        xpToNextLevel:
+          type: integer
+        coins:
+          type: integer
+        insights:
+          $ref: "#/components/schemas/AiInsights"
+        recentActivity:
+          type: array
+          items:
+            $ref: "#/components/schemas/HistoryEntry"
+      required: [greeting, todayCalories, calorieGoal, caloriesBurned, todayWorkoutMinutes, lastSleepHours, currentStreak, weeklyWorkouts, todaySteps, stepGoal, waterMl, waterGoalMl, lifeBalanceScore, level, xp, xpToNextLevel, coins, insights, recentActivity]
+
+    LifeBalance:
+      type: object
+      properties:
+        overallScore:
+          type: number
+          description: 0-100 composite score
+        grade:
+          type: string
+          enum: [excellent, good, fair, needs_work]
+        breakdown:
+          type: object
+          properties:
+            nutrition:
+              type: number
+            fitness:
+              type: number
+            sleep:
+              type: number
+            hydration:
+              type: number
+            consistency:
+              type: number
+          required: [nutrition, fitness, sleep, hydration, consistency]
+        trend:
+          type: string
+          enum: [improving, stable, declining]
+        aiPrediction:
+          type: string
+        weeklyScores:
+          type: array
+          items:
+            type: object
+            properties:
+              day:
+                type: string
+              score:
+                type: number
+            required: [day, score]
+      required: [overallScore, grade, breakdown, trend, aiPrediction, weeklyScores]

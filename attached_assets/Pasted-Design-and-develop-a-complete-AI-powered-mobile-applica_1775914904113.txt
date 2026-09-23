@@ -1,0 +1,193 @@
+Design and develop a complete AI-powered mobile application called “BodyLogic”, focused on fitness (body tracking) and nutrition (meal tracking) with a smart AI assistant.
+
+The app must be modular, scalable, and optimized for performance, with a clean modern UI and well-structured backend.
+
+📱 APP STRUCTURE
+🔹 Navigation System
+Bottom Navigation Bar (Main Sections):
+Home
+Nutrition
+Fitness
+AI Coach
+History
+Profile
+Additional Icons:
+Notifications (top right icon)
+🏠 SECTION 1: HOME (MAIN DASHBOARD)
+Features:
+Welcome message
+Minimized profile view
+Quick access buttons:
+Scan meal
+Start workout
+AI Insights Panel:
+Daily tips
+Meal suggestions
+Workout suggestions
+Data Display:
+Steps today
+Calories (in/out)
+Meal IQ score
+🥗 SECTION 2: NUTRITION SYSTEM
+🔸 Subsystem: Meal Scanner
+Features:
+Camera-based scanning
+Image upload
+Fast logging
+Behavior:
+Detect food
+Save meal data
+Provide instant insights
+🔸 Subsystem: Calorie Tracker
+Track:
+Calories
+Protein
+Carbs
+Fats
+Vitamins
+Minerals
+🔸 Subsystem: Meal IQ
+Features:
+Score (0–28)
+Evaluate meal quality
+Output:
+Strengths & weaknesses
+Suggestions:
+“Add vegetables”
+“Reduce sugar”
+🔸 Subsystem: Meal Logging Streak
+Daily tracking
+Streak counter
+Reward system
+🏋️ SECTION 3: FITNESS SYSTEM
+🔸 Subsystem: Sleep Monitor
+Track:
+Deep sleep
+Light sleep
+REM sleep
+Awake time
+Output:
+Sleep duration
+Sleep score
+🔸 Subsystem: Workout Tracker
+Track:
+Workout type:
+Cardio
+Strength
+Yoga
+Data:
+Duration
+Calories burned
+🔸 Subsystem: Activity Manager
+Features:
+Active minutes
+Movement patterns
+Distance traveled
+Output:
+Weekly charts
+Goals tracking
+🤖 SECTION 4: AI COACH
+🔸 Subsystem: Self-Learning AI
+Features:
+Recognize food images
+Understand ingredients
+Use internet data
+Learning:
+Improve from user corrections
+🔸 Subsystem: Personalized Advice
+Based on:
+Meals
+Fitness
+Behavior
+🔸 Subsystem: Smart Suggestions
+Proactive tips:
+“Walk more today”
+“Increase protein intake”
+🔸 Subsystem: 24/7 Support
+Chat-based AI assistant
+Instant responses
+📊 SECTION 5: HISTORY
+🔸 Overview History
+1–28 days chart
+Combined meals + workouts
+🔸 Meals History
+Daily logs
+Recent meals
+🔸 Workout History
+Workout sessions
+Progress tracking
+👤 SECTION 6: PROFILE
+Features:
+User info
+Stats
+Progress summary
+📈 SUBSECTION: PROGRESS SYSTEM
+🔸 Level System
+XP from:
+Meals
+Workouts
+Streaks
+🔸 Missions / Challenges / Quests
+Daily & weekly tasks
+Rewards:
+Coins
+Gifts
+🔸 Achievements & Milestones
+Titles
+Badges
+🔸 Competitions
+Global (countries)
+Local (friends/community)
+🔸 Motivation System
+Coins system
+Streak system
+Mini games
+🔔 SECTION 7: NOTIFICATIONS
+Features:
+💧 Water Intake
+Notify to drink water
+Example: 3L/day
+🍽️ Meal Reminder
+3 meals per day
+🏋️ Workout Reminder
+Gym / running reminders
+⚙️ TECHNICAL REQUIREMENTS
+Frontend:
+Clean modern UI
+Dark + light mode
+Responsive design
+Backend:
+User authentication system
+Database for:
+Meals
+Workouts
+Activity
+AI Integration:
+Image recognition model
+Recommendation engine
+Performance:
+Fast loading
+Optimized images
+Minimal lag
+🎨 DESIGN STYLE
+Health-focused colors:
+Green (nutrition)
+Blue (AI/tech)
+Minimal UI
+Smooth animations
+🏆 FINAL GOAL
+
+The app should feel:
+
+Intelligent
+Fast
+Personalized
+Easy to use
+Professional
+🔥 BONUS (FOR TOP PROJECT)
+
+Add:
+
+Life Balance Score
+AI predictions
+Behavioral analysis
