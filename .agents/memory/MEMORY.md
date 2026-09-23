@@ -1,0 +1,1 @@
+- [GitHub history recovery](git-sync-recovery.md) — preserve both sides when a remote is replaced by an unrelated upload history; repair through the authenticated GitHub connection.
